@@ -3,14 +3,17 @@ from transformers import pipeline
 import torch
 
 from PyPDF2 import PdfReader
+@st.cache_resource
+def load_qa():
+    return pipeline(
+        "question-answering",
+        model="deepset/roberta-base-squad2",
+        tokenizer="deepset/roberta-base-squad2",
+        device=-1
+    )
 
+qa_pipeline = load_qa()
 
-qa_pipeline = pipeline(
-    "question-answering",
-    model="deepset/roberta-base-squad2",
-    tokenizer="deepset/roberta-base-squad2",
-    device=-1
-)
 
 def load_pdf_text(pdf_file):
     reader = PdfReader(pdf_file)
@@ -39,5 +42,6 @@ if uploaded_file is not None:
             st.subheader("Answer")
             st.success(answer)
             
+
 
 
